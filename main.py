@@ -2,6 +2,7 @@
 import email
 from typing import Optional
 from enum import Enum
+from urllib.parse import scheme_chars
 
 # Pydantic
 from pydantic import BaseModel
@@ -34,37 +35,56 @@ class Location(BaseModel):
     city:str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="CDMX"
         )
     state:str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="CDMX"
         )
-    country:Optional[Country] = Field(default=None)
+    country:Optional[Country] = Field(default=None, example="Mexico")
     
 
 class User(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Mauro"
         )
     last_name: str= Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Cortes"
         )
     age: int = Field(
         ...,
         gt=0,
-        le=115
+        le=115,
+        example="23"
         )
-    email: EmailStr = Field()
-    credit_card: PaymentCardNumber = Field()
-    birthday: PastDate = Field()
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
+    email: EmailStr = Field(..., example="mau@gmail.com")
+    credit_card: PaymentCardNumber = Field(..., example="4417123456789113")
+    birthday: PastDate = Field(..., example="1999-04-21")
+    hair_color: Optional[HairColor] = Field(default=None, example="black")
+    is_married: Optional[bool] = Field(default=None, example=True)
+
+    # class Config:
+    #     schema_extra = {
+    #         "example": {
+    #             "first_name" : "Mauro",
+    #             "last_name" : "Cortes",
+    #             "age" : "23",
+    #             "email": "mauro@gmail.com",
+    #             "credit_card": "4417123456789113",
+    #             "birthday" : "1999-04-21",
+    #             "hair_color" :"black",
+    #             "is_married" : True
+    #         }
+    #     }
 
 
 @app.get("/")
