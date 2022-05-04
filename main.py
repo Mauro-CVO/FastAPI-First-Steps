@@ -1,6 +1,4 @@
 #Python
-from operator import ge
-import re
 from typing import Optional
 
 # Pydantic
@@ -13,6 +11,11 @@ from fastapi import Body, Query, Path
 app = FastAPI()
 
 # Models
+
+class Location(BaseModel):
+    city:str
+    state:str
+    country:str
 
 class User(BaseModel):
     first_name: str
@@ -63,26 +66,19 @@ def show_user(
 ):
     return {user_id: "User exists"}
 
+# Validations: Request Body
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@app.put("/user/{user_id}")
+def update_user(
+    user_id: int = Path(
+        ...,
+        title="User ID",
+        description="This is the user ID. It's required",
+        gte=0
+        ),
+    user: User = Body(...),
+    location: Location = Body(...)
+):
+    results = user.dict()
+    results.update(location.dict())
+    return results
