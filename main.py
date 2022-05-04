@@ -2,7 +2,6 @@
 import email
 from typing import Optional
 from enum import Enum
-from urllib.parse import scheme_chars
 
 # Pydantic
 from pydantic import BaseModel
@@ -106,12 +105,14 @@ def show_user(
         min_length=2,
         max_length=50,
         title="User name",
-        description="This is the user name. It's between 1 and 50 characters"
+        description="This is the user name. It's between 1 and 50 characters",
+        example="Aurora"
         ),
     age: int = Query(
         ...,
         title="User age",
-        description="This is the user age. It's required"
+        description="This is the user age. It's required",
+        example="25"
         ) 
 ):
     return {name: age}
@@ -124,7 +125,8 @@ def show_user(
         ..., 
         gt=0,
         title="User ID",
-        description="This is the user ID. It's required"
+        description="This is the user ID. It's required",
+        example="78951"
         )
 ):
     return {user_id: "User exists"}
@@ -137,7 +139,8 @@ def update_user(
         ...,
         title="User ID",
         description="This is the user ID. It's required",
-        gte=0
+        gte=0,
+        example="4568"
         ),
     user: User = Body(...),
     location: Location = Body(...)
