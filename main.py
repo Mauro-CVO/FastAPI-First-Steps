@@ -1,10 +1,11 @@
 #Python
+import email
 from typing import Optional
 from enum import Enum
 
 # Pydantic
 from pydantic import BaseModel
-from pydantic import Field
+from pydantic import Field, EmailStr, PaymentCardNumber, PastDate
 
 # FastAPI
 from fastapi import FastAPI
@@ -21,10 +22,27 @@ class HairColor(Enum):
     blonde = "blonde"
     red = "red"
 
+class Country(Enum):
+    mexico = "Mexico"
+    colombia = "Colombia"
+    peru = "Peru"
+    chile = "Chile"
+    argentina = "Argentina"
+    brazil = "Brasil"
+
 class Location(BaseModel):
-    city:str
-    state:str
-    country:str
+    city:str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    state:str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    country:Optional[Country] = Field(default=None)
+    
 
 class User(BaseModel):
     first_name: str = Field(
@@ -42,6 +60,9 @@ class User(BaseModel):
         gt=0,
         le=115
         )
+    email: EmailStr = Field()
+    credit_card: PaymentCardNumber = Field()
+    birthday: PastDate = Field()
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[bool] = Field(default=None)
 
